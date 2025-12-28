@@ -1,28 +1,20 @@
-# 1.2. The project, step 1
+# The project
 
-> Instructions
-> Let's get started!
+## 1.4 Step 2: Create deployment.yaml for the course project
 
-> Create a web server that outputs "Server started in port NNNN" when it is started and deploy it into your Kubernetes cluster. Please make it so that an environment variable PORT can be used to choose the used port. You may call the server todo app since it will, amongst other things, provide the functionality of a todo application pretty soon.
-
-> You will not have access to the port when it is running in Kubernetes yet. We will configure the access when we get to networking.
-
-## Solution
+How to deploy with the local image:
 
 ```
-docker build -t todo-app:latest . # build the app locally
-k3d image import todo-app:latest   # Use the local image with k3d
-kubectl create deployment todo-app-dep --image=todo-app:latest # Deploy the local image
-kubectl patch deployment todo-app-dep -p '{"spec":{"template":{"spec":{"containers":[{"name":"todo-app","imagePullPolicy":"IfNotPresent"}]}}}}' # Allow local image
-kubectl logs deployment/todo-app-dep
+docker build -t todo-app:latest .
+kubectl get deployments todo-app-dep 
 ```
 
 Output:
 
 ```
-$ kubectl patch deployment todo-app-dep -p '{"spec":{"template":{"spec":{"containers":[{"name":"todo-app","imagePullPolicy":"IfNotPresent"}]}}}}' # Allow local image
-deployment.apps/todo-app-dep patched
-
-$ kubectl logs deployment/todo-app-dep
+$ docker run todo-app:latest # Test the docker locally
 Server started in port 8000
+
+$ kubectl logs todo-app-dep-7b9f6464cd-nv7qh
+Error from server: Get "https://172.18.0.4:10250/containerLogs/default/todo-app-dep-7b9f6464cd-nv7qh/todo-app": proxy error from 127.0.0.1:6443 while dialing 172.18.0.4:10250, code 502: 502 Bad Gateway
 ```
