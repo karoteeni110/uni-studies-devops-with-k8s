@@ -16,4 +16,5 @@ async def announce_startup() -> None:
 
 @app.get("/")
 async def root() -> dict[str, str]:
-    return {"status": "ok"}
+    # Return hello world html page
+    return {"message": "Hello, World!"}

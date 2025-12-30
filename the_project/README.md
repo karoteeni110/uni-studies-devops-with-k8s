@@ -1,20 +1,23 @@
 # The project
 
-## 1.4 Step 2: Create deployment.yaml for the course project
+## 1.5 Step 3: Port forwarding
 
 How to deploy with the local image:
 
 ```
-docker build -t todo-app:latest .
-kubectl get deployments todo-app-dep 
+docker build -t todo-app:latest . # Update the image
+k3d image import todo-app:latest # Update the container
+kubectl apply -f manifest/deployment.yaml # Deploy the update
 ```
 
 Output:
 
 ```
-$ docker run todo-app:latest # Test the docker locally
-Server started in port 8000
+$ kubectl port-forward todo-app-dep-689b56b9b9-7xx4h 8000:8000
+Forwarding from 127.0.0.1:8000 -> 8000
+Forwarding from [::1]:8000 -> 8000
+Handling connection for 8000
 
-$ kubectl logs todo-app-dep-7b9f6464cd-nv7qh
-Error from server: Get "https://172.18.0.4:10250/containerLogs/default/todo-app-dep-7b9f6464cd-nv7qh/todo-app": proxy error from 127.0.0.1:6443 while dialing 172.18.0.4:10250, code 502: 502 Bad Gateway
+$ curl http://localhost:8000/ # Use another terminal
+{"message":"Hello, World!"}
 ```
