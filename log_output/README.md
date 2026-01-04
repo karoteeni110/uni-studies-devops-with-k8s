@@ -6,6 +6,7 @@ How to deploy
 
 ```
 docker build -t log-output:latest . # Use local image
+k3s image import log-output:latest
 kubectl apply -f ./manifests/deployment.yaml
 ```
 
